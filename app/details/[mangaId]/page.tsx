@@ -46,10 +46,6 @@ const MangaDetails: React.FC<MangaDetailsProps> = ({ params }) => {
   const genres = manga.genres || ["Unknown Genre"];
   const author = manga.authors?.[0] || "Unknown Author";
 
-  // const handleReadNow = () => {
-  //   router.push(`/read/${mangaId}`);
-  // };
-
   return (
       <TracingBeam>
         <div className="flex flex-wrap justify-between p-4">
@@ -65,7 +61,7 @@ const MangaDetails: React.FC<MangaDetailsProps> = ({ params }) => {
                 <h1 className="text-4xl font-bold mt-2 mb-4">{manga.title}</h1>
 
                 <div className="mb-4">
-                  {genres.map((genre: string, index: number) => (
+                  {genres.slice(0, 5).map((genre: string, index: number) => (
                     <span
                       key={index}
                       className="mr-2 bg-white bg-opacity-5 p-2 rounded-md"
@@ -75,14 +71,8 @@ const MangaDetails: React.FC<MangaDetailsProps> = ({ params }) => {
                   ))}
                 </div>
 
-                <p className="text-lg mb-4">{manga.summary}</p>
+                <p className="text-lg mb-4">{manga.summary.slice(0, 600)}</p>
 
-                {/* <button
-                  className="bg-red-500 hover:bg-red-600 text-white py-2 px-6 rounded-full shadow-md w-40"
-                  onClick={handleReadNow}
-                >
-                  Read Now
-                </button> */}
               </div>
             </div>
           </div>

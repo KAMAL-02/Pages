@@ -7,6 +7,8 @@ import { useSearchParams } from "next/navigation";
 import ContentNotAvailable from "@/components/Notavai";
 import Loader from "@/components/Loader";
 import Footer from "@/section/Footer";
+import Link from "next/link";
+import Button from "@/components/Button";
 
 const MangaPage = () => {
   const [mangas, setMangas] = useState<any[]>([]);
@@ -14,6 +16,26 @@ const MangaPage = () => {
   const [error, setError] = useState(false);
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search");
+
+  const genres = [
+    "Shounen",
+    "Seinen",
+    "Harem",
+    "Romance",
+    "Fantasy",
+    "Ecchi",
+    "Adventure",
+    "Action",
+    "Horror",
+    "Comedy",
+    "Isekai",
+    "Shoujo",
+    "Magic",
+    "Drama",
+    "Mystery",
+    "Mecha",
+    "Sports",
+  ];
 
   useEffect(() => {
     const fetchMangas = async () => {
@@ -52,9 +74,10 @@ const MangaPage = () => {
 
   return (
     <TracingBeam>
+    <div className="min-h-screen">
       <h1 className="text-2xl font-bold m-4">Mangas</h1>
       <div className="flex m-4 space-x-4">
-        <div className="grid grid-cols-2 gap-5 w-3/5 max-w-6xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-3/5 max-w-6xl">
           {mangas.map((manga) => (
             <GenreCard
               key={manga.id}
@@ -73,7 +96,7 @@ const MangaPage = () => {
             />
           ))}
         </div>
-        {/* <div className="flex flex-col justify-start items-center w-2/5 bg-transparent p-4 rounded-lg">
+        <div className="flex flex-col justify-start items-center w-2/5 bg-transparent p-4 rounded-lg">
           <h2 className="text-3xl font-semibold text-white mb-6">Genres</h2>
           <div className="flex flex-wrap justify-center gap-4">
             {genres.map((genre) => (
@@ -82,7 +105,8 @@ const MangaPage = () => {
               </Link>
             ))}
           </div>
-        </div> */}
+        </div>
+      </div>
       </div>
       <Footer />
     </TracingBeam>
