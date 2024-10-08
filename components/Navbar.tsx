@@ -1,5 +1,5 @@
 "use client"
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Input } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, Link, Input } from "@nextui-org/react";
 import { useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { useRouter } from "next/navigation";

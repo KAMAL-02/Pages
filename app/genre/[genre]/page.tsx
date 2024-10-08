@@ -10,6 +10,7 @@ import Loader from "@/components/Loader";
 import ContentNotAvailable from "@/components/Notavai";
 import Footer from "@/section/Footer";
 import axios from "axios";
+import { Manga } from "@/types/manga";
 
 interface Props {
   params: {
@@ -20,7 +21,7 @@ interface Props {
 const GenrePage: React.FC<Props> = ({ params }) => {
   const { genre } = params;
   const { toast } = useToast();
-  const [mangas, setMangas] = useState<any[]>([]);
+  const [mangas, setMangas] = useState<Manga[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,7 +56,7 @@ const GenrePage: React.FC<Props> = ({ params }) => {
     };
 
     fetchGenreData();
-  }, [genre, toast]);
+  }, [genre, error, toast]);
 
   if (loading)
     return (

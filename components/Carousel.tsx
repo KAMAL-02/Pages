@@ -46,7 +46,7 @@ const Carousel: React.FC = () => {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [mangas.length]);
+  }, []);
 
   return (
     <div className='m-5 bg-blue-500'>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
+import { Manga } from "@/types/manga";
 import ChapterList from "@/components/Chapterlist";
 import Footer from "@/section/Footer";
 import Loader from "@/components/Loader";
@@ -16,7 +17,7 @@ interface MangaDetailsProps {
 }
 
 const MangaDetails: React.FC<MangaDetailsProps> = ({ params }) => {
-  const [manga, setManga] = useState<any>(null);
+  const [manga, setManga] = useState<Manga | null >(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const mangaId = params.mangaId;
@@ -53,7 +54,7 @@ const MangaDetails: React.FC<MangaDetailsProps> = ({ params }) => {
     };
 
     fetchMangaDetails();
-  }, [mangaId, toast]);
+  }, [mangaId, error, toast]);
 
   if (loading)
     return (
@@ -61,7 +62,7 @@ const MangaDetails: React.FC<MangaDetailsProps> = ({ params }) => {
         <Loader />
       </div>
     );
-  if (error) return <ContentNotAvailable />;
+  if (error || !manga) return <ContentNotAvailable />;
 
   const genres = manga.genres || ["Unknown Genre"];
   const author = manga.authors?.[0] || "Unknown Author";

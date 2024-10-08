@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Loader from './Loader';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+import { ChapterImage } from '@/types/fetchChapter';
+import axios from 'axios';
+import Loader from './Loader';
 
 interface ChapterListProps {
   mangaId: string;
 }
 
 const ChapterList: React.FC<ChapterListProps> = ({ mangaId }) => {
-  const [chapters, setChapters] = useState<any[]>([]);
+  const [chapters, setChapters] = useState<ChapterImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { toast } = useToast();
-
+  
   useEffect(() => {
     const fetchChapters = async () => {
       const cachedChapters = sessionStorage.getItem(`chapters-${mangaId}`);
@@ -45,7 +46,7 @@ const ChapterList: React.FC<ChapterListProps> = ({ mangaId }) => {
     };
 
     fetchChapters();
-  }, [mangaId, toast]);
+  }, [mangaId, error, toast]);
 
   const handleReadNow = (chapterId: string, chapterTitle: string) => {
     router.push(`/read/${mangaId}/${chapterId}?title=${encodeURIComponent(chapterTitle)}`);
@@ -64,7 +65,7 @@ const ChapterList: React.FC<ChapterListProps> = ({ mangaId }) => {
           {chapters.length === 0 ? (
             <p>No chapters available</p>
           ) : (
-            chapters.map((chapter: any, index: number) => (
+            chapters.map((chapter: ChapterImage, index: number) => (
               <div key={chapter.id}>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-lg">{chapter.title}</span>

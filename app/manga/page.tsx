@@ -10,9 +10,10 @@ import Loader from "@/components/Loader";
 import Footer from "@/section/Footer";
 import Link from "next/link";
 import Button from "@/components/Button";
+import { Manga } from "@/types/manga";
 
 const MangaPage = () => {
-  const [mangas, setMangas] = useState<any[]>([]);
+  const [mangas, setMangas] = useState<Manga[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const searchParams = useSearchParams();
@@ -48,6 +49,7 @@ const MangaPage = () => {
         const response = await axios.get(`/api/mangas?text=${searchQuery}`);
         setMangas(response.data);
       } catch (err) {
+        console.log('error is:', err);
         setError(true);
         toast({
           title: "Error fetching mangas",

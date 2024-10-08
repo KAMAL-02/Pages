@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import { useToast } from "@/hooks/use-toast";
+import { ChapterImage } from "@/types/chapter";
 import axios from "axios";
 import Image from 'next/image';
 import Footer from "@/section/Footer";
@@ -38,7 +39,7 @@ const ReadChapter: React.FC<ChapterProps> = ({ params }) => {
       }
       try {
         const response = await axios.get(`/api/chapter/${chapterId}`);
-        const imageLinks = response.data.data.map((item: any) => item.link);
+        const imageLinks = response.data.data.map((item: ChapterImage) => item.link);
 
         setChapterImages(imageLinks);
         sessionStorage.setItem(`chapter-images-${chapterId}`, JSON.stringify(imageLinks));
@@ -59,7 +60,7 @@ const ReadChapter: React.FC<ChapterProps> = ({ params }) => {
     };
 
     fetchChapterImages();
-  }, [chapterId, toast]);
+  }, [chapterId, error, toast]);
 
   if (loading)
     return (
