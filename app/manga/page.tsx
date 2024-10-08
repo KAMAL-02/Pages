@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState, Suspense } from "react";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import { useSearchParams } from "next/navigation";
@@ -49,7 +50,7 @@ const MangaPage = () => {
         const response = await axios.get(`/api/mangas?text=${searchQuery}`);
         setMangas(response.data);
       } catch (err) {
-        console.log('error is:', err);
+        console.log("error is:", err);
         setError(true);
         toast({
           title: "Error fetching mangas",
@@ -66,12 +67,17 @@ const MangaPage = () => {
     }
   }, [searchQuery, toast]);
 
-  // Move loading/error handling into a Suspense boundary
+  // Wrap the entire UI dependent on searchParams and data fetching in Suspense
   return (
-    <TracingBeam>
-      <div className="min-h-screen">
-        <h1 className="text-2xl font-bold m-4" style={{ fontFamily: 'Balthazar, sans-serif' }}>Mangas</h1>
-        <Suspense fallback={<Loader />}>
+    <Suspense fallback={<Loader />}>
+      <TracingBeam>
+        <div className="min-h-screen">
+          <h1
+            className="text-2xl font-bold m-4"
+            style={{ fontFamily: "Balthazar, sans-serif" }}
+          >
+            Mangas
+          </h1>
           {loading ? (
             <div className="flex items-center justify-center h-screen">
               <Loader />
@@ -84,19 +90,25 @@ const MangaPage = () => {
                 {mangas.map((manga) => (
                   <GenreCard
                     key={manga.id}
-                    title={manga.title.length > 25
-                      ? manga.title.slice(0, 25) + "..."
-                      : manga.title}
-                    summary={manga.summary.length > 100
-                      ? manga.summary.slice(0, 80) + "..."
-                      : manga.summary}
+                    title={
+                      manga.title.length > 25
+                        ? manga.title.slice(0, 25) + "..."
+                        : manga.title
+                    }
+                    summary={
+                      manga.summary.length > 100
+                        ? manga.summary.slice(0, 80) + "..."
+                        : manga.summary
+                    }
                     thumb={manga.thumb}
                     link={`/details/${manga.id}`}
                   />
                 ))}
               </div>
               <div className="flex flex-col justify-start items-center w-2/5 bg-transparent p-4 rounded-lg">
-                <h2 className="text-3xl font-semibold text-white mb-6">Genres</h2>
+                <h2 className="text-3xl font-semibold text-white mb-6">
+                  Genres
+                </h2>
                 <div className="flex flex-wrap justify-center gap-4">
                   {genres.map((genre) => (
                     <Link href={`/genre/${genre}`} key={genre}>
@@ -107,10 +119,10 @@ const MangaPage = () => {
               </div>
             </div>
           )}
-        </Suspense>
-      </div>
-      <Footer />
-    </TracingBeam>
+        </div>
+        <Footer />
+      </TracingBeam>
+    </Suspense>
   );
 };
 
