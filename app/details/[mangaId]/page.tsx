@@ -6,6 +6,9 @@ import axios from "axios";
 import ChapterList from "@/components/Chapterlist";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import Footer from "@/section/Footer";
+import Loader from "@/components/Loader";
+import { useToast } from "@/hooks/use-toast";
+import ContentNotAvailable from "@/components/Notavai";
 
 interface MangaDetailsProps {
   params: {
@@ -16,32 +19,50 @@ interface MangaDetailsProps {
 const MangaDetails: React.FC<MangaDetailsProps> = ({ params }) => {
   const [manga, setManga] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
   const mangaId = params.mangaId;
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchMangaDetails = async () => {
+      console.log("mangaid is: " ,mangaId);
+      const cachedManga = sessionStorage.getItem(`manga_${mangaId}`);
+      if (cachedManga) {
+        setManga(JSON.parse(cachedManga));
+        setLoading(false);
+        return;
+      }
+
       try {
-        const mangaApiUrl = process.env.NEXT_PUBLIC_MANGA_API_URL;
-        const response = await axios.get(`${mangaApiUrl}?id=${mangaId}`, {
-          headers: {
-            "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
-            "x-rapidapi-host": process.env.NEXT_PUBLIC_RAPIDAPI_HOST,
-          },
-        });
+        const response = await axios.get(`/api/manga/${mangaId}`);
         setManga(response.data.data);
-      } catch (error) {
-        console.error("Error fetching manga details:", error);
+        sessionStorage.setItem(`manga_${mangaId}`, JSON.stringify(response.data.data));
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          setError(err.response?.data.message || "Failed to fetch data");
+        } else {
+          setError("Failed to fetch data");
+        }
+        toast({
+          title: "Error fetching manga details",
+          description: error||"Unknown error",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }
     };
 
     fetchMangaDetails();
-  }, [mangaId]);
+  }, [mangaId, toast]);
 
-  if (loading) return <p>Loading...</p>;
-  if (!manga) return <p>Manga not found</p>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader />
+      </div>
+    );
+  if (error) return <ContentNotAvailable />;
 
   const genres = manga.genres || ["Unknown Genre"];
   const author = manga.authors?.[0] || "Unknown Author";

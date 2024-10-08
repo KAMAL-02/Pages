@@ -1,27 +1,58 @@
 "use client";
 import Card from "@/components/Card";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
 import { useRouter } from "next/navigation";
-import { useManga } from "@/context/MangaContext";
+import axios from "axios";
 
 export const Trending = () => {
-  const { mangas, loading, error } = useManga();
+  const [mangas, setMangas] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
+    const cachedMangas = sessionStorage.getItem("trendingMangas");
+
+    if (cachedMangas) {
+      setMangas(JSON.parse(cachedMangas));
+      setLoading(false);
+    } else {
+      const fetchTrendingMangas = async () => {
+        try {
+          const response = await axios.get("/api/trending");
+          setMangas(response.data);
+          sessionStorage.setItem("trendingMangas", JSON.stringify(response.data));
+        } catch (error) {
+          console.error("Error fetching mangas:", error);
+          setError("Failed to fetch trending mangas.");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchTrendingMangas();
+    }
+  }, []);
+
+  useEffect(() => {
     if (error) {
       toast({
-        title: "Error fetching mangas",
+        title: "Error fetching mangas/Too many requests",
         description: error,
         variant: "destructive",
       });
     }
   }, [error, toast]);
 
-  if (loading || error ) return <Loader />;
+  if (loading || error )
+    return (
+      <div className="flex items-center justify-center">
+        <Loader /> 
+      </div>
+    );
 
   const handleCardClick = (mangaId: string) => {
     router.push(`/details/${mangaId}`);

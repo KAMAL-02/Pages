@@ -1,12 +1,15 @@
 "use client";
 
-import { useGenreContext } from "@/context/GenreContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import GenreCard from "@/components/Genrecard";
 import Button from "@/components/Button";
 import Link from "next/link";
 import { TracingBeam } from "@/components/ui/tracing-beam";
+import Loader from "@/components/Loader";
+import ContentNotAvailable from "@/components/Notavai";
+import { useToast } from "@/hooks/use-toast";
 import Footer from "@/section/Footer";
+import axios from "axios";
 
 interface Props {
   params: {
@@ -16,16 +19,51 @@ interface Props {
 
 const GenrePage: React.FC<Props> = ({ params }) => {
   const { genre } = params;
-  const { genresData, fetchGenreData, loading, error } = useGenreContext();
+  const { toast } = useToast();
+  const [mangas, setMangas] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  
   useEffect(() => {
-    fetchGenreData(genre);
-  }, [genre]);
+    const fetchGenreData = async () => {
+      const cachedMangas = sessionStorage.getItem(genre);
+      if (cachedMangas) {
+        setMangas(JSON.parse(cachedMangas));
+        setLoading(false);
+        return;
+      }
 
-  const mangas: any[] = genresData[genre] || [];
+      try {
+        const response = await axios.get(`/api/genres?genre=${genre}`);
+        setMangas(response.data);
+        sessionStorage.setItem(genre, JSON.stringify(response.data));
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          setError(err.response?.data.message || "Failed to fetch data");
+        } else {
+          setError("Failed to fetch data");
+        }
+        toast({
+          title: "Error fetching mangas/Too many requests",
+          description: error || "An unknown error occurred.",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+    fetchGenreData();
+  }, [genre, toast]);
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader />
+      </div>
+    );
+  if (error) return <ContentNotAvailable />
 
   const genres = [
     "Shounen",

@@ -4,8 +4,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "./providers";
 import Nav from "@/components/Navbar";
-import { MangaProvider } from "@/context/MangaContext";
-import { GenreProvider } from "@/context/GenreContext";
 import { Toaster } from "@/components/ui/toaster"
 
 const geistSans = localFont({
@@ -34,15 +32,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <MangaProvider>
-          <GenreProvider>
             <Providers>
               <Nav />
               {children}
               <Toaster />
             </Providers>
-          </GenreProvider>
-        </MangaProvider>
       </body>
     </html>
   );

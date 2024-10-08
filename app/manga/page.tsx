@@ -9,6 +9,7 @@ import Loader from "@/components/Loader";
 import Footer from "@/section/Footer";
 import Link from "next/link";
 import Button from "@/components/Button";
+import { useToast } from "@/hooks/use-toast";
 
 const MangaPage = () => {
   const [mangas, setMangas] = useState<any[]>([]);
@@ -16,6 +17,7 @@ const MangaPage = () => {
   const [error, setError] = useState(false);
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search");
+  const { toast } = useToast();
 
   const genres = [
     "Shounen",
@@ -66,7 +68,22 @@ const MangaPage = () => {
     }
   }, [searchQuery]);
 
-  if (loading) return <Loader />;
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error fetching mangas/Too many requests",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader />
+      </div>
+    );
 
   if (error || mangas.length === 0) {
     return <ContentNotAvailable />;
