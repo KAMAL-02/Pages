@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link'; // Import Link from Next.js
+import Link from 'next/link';
 
 interface Manga {
   title: string;
@@ -9,7 +9,6 @@ interface Manga {
   image: string;
 }
 
-// Manga data
 const mangas: Manga[] = [
   {
     title: 'Jujutsu Kaisen',
@@ -44,13 +43,13 @@ const Carousel: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % mangas.length);
-    }, 4000); // Change image every 4 seconds
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [mangas.length]);
 
   return (
-    <div className='m-5 bg-slate-800'>
+    <div className='m-5 bg-blue-500'>
       <div className="relative w-full h-[500px] flex items-center justify-between overflow-hidden p-4 rounded-md">
         <div className="absolute inset-0 z-0">
           <Image
@@ -59,32 +58,31 @@ const Carousel: React.FC = () => {
             fill
             priority
             sizes="100vw"
-            style={{ objectFit: 'cover', filter: 'blur(10px)' }} // Apply blur
+            style={{ objectFit: 'cover', filter: 'blur(10px)' }}
           />
         </div>
 
         <div className="flex w-full h-full items-center justify-between z-10 relative px-10">
           <div className="flex flex-col justify-center w-1/2">
-            <h2 className="text-3xl font-semibold text-white text-left">
+            <h2 className="text-3xl font-semibold text-white text-left" style={{ fontFamily: 'Balthazar, sans-serif' }}>
               {mangas[currentIndex].title}
             </h2>
-            <p className="mt-2 text-lg text-white text-left" style={{ fontFamily: "'Road Rage', cursive" }}>
+            <p className="mt-2 text-lg text-white text-left hidden md:block" style={{ fontFamily: 'Titillium Web, sans-serif' }}>
               {mangas[currentIndex].description}
             </p>
             <Link href="/details" className="mt-4">
-              <button className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300">
+              <button className="px-6 py-2 bg-black bg-opacity-80 text-white rounded-lg hover:bg-black transition duration-300">
                 Read Now
               </button>
             </Link>
           </div>
 
-          {/* Right Side: Focused Image */}
           <div className="w-1/2 flex justify-end">
             <div className="relative">
               <Image
                 src={mangas[currentIndex].image}
                 alt={`Cover ${currentIndex}`}
-                width={250} // Adjust size for cover image
+                width={250}
                 height={375}
                 className="rounded-lg shadow-lg transition-transform duration-500 ease-in-out"
               />

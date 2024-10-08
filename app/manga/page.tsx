@@ -1,15 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import { TracingBeam } from "@/components/ui/tracing-beam";
+import { useSearchParams } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 import GenreCard from "@/components/Genrecard";
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
 import ContentNotAvailable from "@/components/Notavai";
 import Loader from "@/components/Loader";
 import Footer from "@/section/Footer";
 import Link from "next/link";
 import Button from "@/components/Button";
-import { useToast } from "@/hooks/use-toast";
 
 const MangaPage = () => {
   const [mangas, setMangas] = useState<any[]>([]);
@@ -78,7 +78,7 @@ const MangaPage = () => {
   return (
     <TracingBeam>
     <div className="min-h-screen">
-      <h1 className="text-2xl font-bold m-4">Mangas</h1>
+      <h1 className="text-2xl font-bold m-4" style={{ fontFamily: 'Balthazar, sans-serif' }}>Mangas</h1>
       <div className="flex m-4 space-x-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-3/5 max-w-6xl">
           {mangas.map((manga) => (

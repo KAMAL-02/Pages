@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loader from './Loader';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import Loader from './Loader';
 
 interface ChapterListProps {
   mangaId: string;
@@ -69,7 +69,7 @@ const ChapterList: React.FC<ChapterListProps> = ({ mangaId }) => {
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-lg">{chapter.title}</span>
                   <button
-                    className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 text-sm rounded-full"
+                    className="bg-black bg-opacity- hover:bg-black text-white py-1 px-3 text-sm rounded-full"
                     onClick={() => handleReadNow(chapter.id, chapter.title)}
                   >
                     Read

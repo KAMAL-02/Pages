@@ -1,10 +1,10 @@
 "use client";
 import Card from "@/components/Card";
+import axios from "axios";
+import Loader from "@/components/Loader";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
-import Loader from "@/components/Loader";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 
 export const Trending = () => {
   const [mangas, setMangas] = useState<any[]>([]);
@@ -59,7 +59,9 @@ export const Trending = () => {
   };
 
   return (
-    <div className="flex flex-nowrap justify-center gap-2 overflow-x-auto">
+    <>
+    <h2 className="text-3xl font-bold text-white mb-3 ml-4">Latest</h2>
+    <div className="hidden sm:flex flex-nowrap justify-center gap-2 overflow-x-auto">
           {mangas.slice(0, 6).map((manga) => (
         <Card
           key={manga.id}
@@ -75,5 +77,6 @@ export const Trending = () => {
         />
       ))}
       </div>
+      </>
   );
 };

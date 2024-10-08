@@ -29,7 +29,7 @@ export default function Nav() {
                             height={60}
                             className="mr-2 rounded-lg"
                         />
-                        <p className="hidden sm:block font-bold text-white text-lg pl-1" style={{ fontFamily: "'Road Rage', cursive" }}>Pages</p>
+                        <p className="hidden sm:block font-bold text-white text-lg pl-1" style={{ fontFamily: "'Balthazar', sans-serif" }}>Pages</p>
                     </Link>
                 </NavbarBrand>
             </NavbarContent>

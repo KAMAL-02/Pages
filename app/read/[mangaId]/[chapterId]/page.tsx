@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { TracingBeam } from "@/components/ui/tracing-beam";
+import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import Image from 'next/image';
 import Footer from "@/section/Footer";
-import { TracingBeam } from "@/components/ui/tracing-beam";
 import Loader from "@/components/Loader";
-import { useToast } from "@/hooks/use-toast";
 import ContentNotAvailable from "@/components/Notavai";
 
 
@@ -72,7 +72,7 @@ const ReadChapter: React.FC<ChapterProps> = ({ params }) => {
   return (
     <TracingBeam>
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">{title}</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center" style={{ fontFamily: 'Balthazar, sans-serif' }}>{title}</h1>
       <div className="flex flex-col space-y-4">
         {chapterImages.map((imagesrc, index) => (
           <div key={index} className="w-full">

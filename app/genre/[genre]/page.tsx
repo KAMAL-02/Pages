@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { TracingBeam } from "@/components/ui/tracing-beam";
+import { useToast } from "@/hooks/use-toast";
 import GenreCard from "@/components/Genrecard";
 import Button from "@/components/Button";
 import Link from "next/link";
-import { TracingBeam } from "@/components/ui/tracing-beam";
 import Loader from "@/components/Loader";
 import ContentNotAvailable from "@/components/Notavai";
-import { useToast } from "@/hooks/use-toast";
 import Footer from "@/section/Footer";
 import axios from "axios";
 
@@ -88,7 +88,7 @@ const GenrePage: React.FC<Props> = ({ params }) => {
   return (
     <div className="bg-[#171717]">
     <TracingBeam>
-      <h1 className="text-2xl font-bold m-4">{genre} Mangas</h1>
+      <h1 className="text-2xl font-bold m-4" style={{ fontFamily: 'Balthazar, sans-serif' }}>{genre} Mangas</h1>
       <div className="flex m-4 space-x-4">
         <div className="grid grid-cols-2 gap-5 w-3/5 max-w-6xl">
           {mangas.map((manga) => (
@@ -110,7 +110,7 @@ const GenrePage: React.FC<Props> = ({ params }) => {
           ))}
         </div>
         <div className="flex flex-col justify-start items-center w-2/5 bg-transparent p-4 rounded-lg">
-          <h2 className="text-3xl font-semibold text-white mb-6">Genres</h2>
+          <h2 className="text-3xl font-semibold text-white mb-6" style={{ fontFamily: 'Balthazar, sans-serif' }}>Genres</h2>
           <div className="flex flex-wrap justify-center gap-4">
             {genres.map((genre) => (
               <Link href={`/genre/${genre}`} key={genre}>

@@ -1,5 +1,4 @@
 "use client";
-import { div } from "framer-motion/client";
 import React, { useRef, useState } from "react";
 import { FaVolumeMute, FaVolumeUp, FaPlay, FaPause } from "react-icons/fa";
 
@@ -30,7 +29,7 @@ const Info = () => {
     
     <div className="flex flex-col lg:flex-row justify-between mx-4 my-4 items-start">
       <div className="w-full lg:w-4/5 p-4 flex flex-col justify-center ml-0 lg:ml-8 h-56">
-        <p className="text-lg leading-relaxed text-white pl-0 lg:pl-6" style={{ fontFamily: "'Road Rage', cursive" }}>
+        <p className="text-lg leading-relaxed text-white pl-0 lg:pl-6" style={{ fontFamily: 'Titillium Web, sans-serif' }}>
           Pages is a platform for reading manga online for free. With an
           extensive library boasting chapters across various genres, we ensure
           that every manga enthusiast finds something they love. No registration

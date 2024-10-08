@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { TracingBeam } from "@/components/ui/tracing-beam";
+import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import ChapterList from "@/components/Chapterlist";
-import { TracingBeam } from "@/components/ui/tracing-beam";
 import Footer from "@/section/Footer";
 import Loader from "@/components/Loader";
-import { useToast } from "@/hooks/use-toast";
 import ContentNotAvailable from "@/components/Notavai";
 
 interface MangaDetailsProps {
@@ -79,7 +78,7 @@ const MangaDetails: React.FC<MangaDetailsProps> = ({ params }) => {
               />
 
               <div className="flex flex-col w-full">
-                <h1 className="text-4xl font-bold mt-2 mb-4">{manga.title}</h1>
+                <h1 className="text-4xl font-bold mt-2 mb-4" style={{ fontFamily: 'Balthazar, sans-serif' }}>{manga.title}</h1>
 
                 <div className="mb-4">
                   {genres.slice(0, 5).map((genre: string, index: number) => (
@@ -92,7 +91,7 @@ const MangaDetails: React.FC<MangaDetailsProps> = ({ params }) => {
                   ))}
                 </div>
 
-                <p className="text-lg mb-4">{manga.summary.slice(0, 600)}</p>
+                <p className="text-lg mb-4" style={{ fontFamily: 'Titillium Web, sans-serif' }}>{manga.summary.slice(0, 600)}</p>
 
               </div>
             </div>

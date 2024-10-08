@@ -1,5 +1,3 @@
-// components/GenreCard.tsx
-
 import Link from 'next/link';
 import React from 'react';
 
@@ -7,7 +5,7 @@ interface GenreCardProps {
     title: string;
     summary: string;
     thumb: string;
-    link: string; // Route to navigate to
+    link: string;
 }
 
 const GenreCard: React.FC<GenreCardProps> = ({ title, summary, thumb, link }) => {
@@ -17,8 +15,8 @@ const GenreCard: React.FC<GenreCardProps> = ({ title, summary, thumb, link }) =>
                 <img src={thumb} alt={title} className="h-40 w-24 object-cover rounded-lg" />
             </div>
             <div className="flex-grow">
-                <h3 className="text-xl font-semibold">{title}</h3>
-                <p className="text-sm">{summary.length > 80 ? `${summary.substring(0, 80)}...` : summary}</p>
+                <h3 className="text-xl font-semibold" style={{ fontFamily: 'Balthazar, sans-serif' }}>{title}</h3>
+                <p className="text-sm" style={{ fontFamily: 'Titillium Web, sans-serif' }}>{summary.length > 80 ? `${summary.substring(0, 80)}...` : summary}</p>
                 <Link href={link} className="text-blue-400 mt-2 inline-block">Read more</Link>
             </div>
         </div>
