@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { TracingBeam } from "@/components/ui/tracing-beam";
 import { useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
@@ -66,52 +66,48 @@ const MangaPage = () => {
     }
   }, [searchQuery, toast]);
 
-  if (loading)
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader />
-      </div>
-    );
-
-  if (error || mangas.length === 0) {
-    return <ContentNotAvailable />;
-  }
-
+  // Move loading/error handling into a Suspense boundary
   return (
     <TracingBeam>
-    <div className="min-h-screen">
-      <h1 className="text-2xl font-bold m-4" style={{ fontFamily: 'Balthazar, sans-serif' }}>Mangas</h1>
-      <div className="flex m-4 space-x-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-3/5 max-w-6xl">
-          {mangas.map((manga) => (
-            <GenreCard
-              key={manga.id}
-              title={
-                manga.title.length > 25
-                  ? manga.title.slice(0, 25) + "..."
-                  : manga.title
-              }
-              summary={
-                manga.summary.length > 100
-                  ? manga.summary.slice(0, 80) + "..."
-                  : manga.summary
-              }
-              thumb={manga.thumb}
-              link={`/details/${manga.id}`}
-            />
-          ))}
-        </div>
-        <div className="flex flex-col justify-start items-center w-2/5 bg-transparent p-4 rounded-lg">
-          <h2 className="text-3xl font-semibold text-white mb-6">Genres</h2>
-          <div className="flex flex-wrap justify-center gap-4">
-            {genres.map((genre) => (
-              <Link href={`/genre/${genre}`} key={genre}>
-                <Button text={genre} />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
+      <div className="min-h-screen">
+        <h1 className="text-2xl font-bold m-4" style={{ fontFamily: 'Balthazar, sans-serif' }}>Mangas</h1>
+        <Suspense fallback={<Loader />}>
+          {loading ? (
+            <div className="flex items-center justify-center h-screen">
+              <Loader />
+            </div>
+          ) : error || mangas.length === 0 ? (
+            <ContentNotAvailable />
+          ) : (
+            <div className="flex m-4 space-x-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-3/5 max-w-6xl">
+                {mangas.map((manga) => (
+                  <GenreCard
+                    key={manga.id}
+                    title={manga.title.length > 25
+                      ? manga.title.slice(0, 25) + "..."
+                      : manga.title}
+                    summary={manga.summary.length > 100
+                      ? manga.summary.slice(0, 80) + "..."
+                      : manga.summary}
+                    thumb={manga.thumb}
+                    link={`/details/${manga.id}`}
+                  />
+                ))}
+              </div>
+              <div className="flex flex-col justify-start items-center w-2/5 bg-transparent p-4 rounded-lg">
+                <h2 className="text-3xl font-semibold text-white mb-6">Genres</h2>
+                <div className="flex flex-wrap justify-center gap-4">
+                  {genres.map((genre) => (
+                    <Link href={`/genre/${genre}`} key={genre}>
+                      <Button text={genre} />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </Suspense>
       </div>
       <Footer />
     </TracingBeam>
