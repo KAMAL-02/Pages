@@ -1,8 +1,8 @@
-// components/ChapterList.tsx
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import Loader from './Loader';
 
 interface ChapterListProps {
   mangaId: string;
@@ -11,29 +11,41 @@ interface ChapterListProps {
 const ChapterList: React.FC<ChapterListProps> = ({ mangaId }) => {
   const [chapters, setChapters] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [chapterInput, setChapterInput] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchChapters = async () => {
+      const cachedChapters = sessionStorage.getItem(`chapters-${mangaId}`);
+
+      if (cachedChapters) {
+        setChapters(JSON.parse(cachedChapters));
+        setLoading(false);
+        return;
+      }
       try {
-        const chapterApiUrl = `${process.env.NEXT_PUBLIC_MANGA_API_URL}/chapter?id=${mangaId}`; // Adjust your API endpoint accordingly
-        const response = await axios.get(chapterApiUrl, {
-          headers: {
-            "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
-            "x-rapidapi-host": process.env.NEXT_PUBLIC_RAPIDAPI_HOST,
-          },
+        const response = await axios.get(`/api/chapters/${mangaId}`);
+        setChapters(response.data.data || []);
+        sessionStorage.setItem(`chapters-${mangaId}`, JSON.stringify(response.data.data));
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          setError(err.response?.data.message || "Failed to fetch data");
+        } else {
+          setError("Failed to fetch data");
+        }
+        toast({
+          title: "Error fetching manga details",
+          description: error || "Unknown error",
+          variant: "destructive",
         });
-        setChapters(response.data.data || []); // Adjust according to the response structure
-      } catch (error) {
-        console.error("Error fetching chapters:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchChapters();
-  }, [mangaId]);
+  }, [mangaId, toast]);
 
   const handleReadNow = (chapterId: string, chapterTitle: string) => {
     router.push(`/read/${mangaId}/${chapterId}?title=${encodeURIComponent(chapterTitle)}`);
@@ -43,8 +55,10 @@ const ChapterList: React.FC<ChapterListProps> = ({ mangaId }) => {
     <div className="m-6 bg-white bg-opacity-5 rounded-lg shadow-md overflow-y-auto max-h-96 w-4/5">
       <h2 className="text-xl font-semibold mb-4 p-4 border-b border-white border-opacity-5">Chapters</h2>
 
-      {loading ? (
-        <p>Loading chapters...</p>
+      {loading || error || chapters.length === 0 ? (
+       <div className="flex items-center justify-center">
+       <Loader />
+     </div>
       ) : (
         <div className="p-4">
           {chapters.length === 0 ? (

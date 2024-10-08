@@ -45,19 +45,15 @@ const MangaPage = () => {
       setError(false);
 
       try {
-        const mangaApiUrl = process.env.NEXT_PUBLIC_MANGA_API_URL;
-        if (!mangaApiUrl) throw new Error("NO_URL");
-  
-        const response = await axios.get(`${mangaApiUrl}/search?text=${searchQuery}`, {
-          params: { page: 1, nsfw: "true", type: "all" },
-          headers: {
-            "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
-            "x-rapidapi-host": process.env.NEXT_PUBLIC_RAPIDAPI_HOST,
-          },
-        });
-        setMangas(response.data.data);
+        const response = await axios.get(`/api/mangas?text=${searchQuery}`);
+        setMangas(response.data);
       } catch (err) {
         setError(true);
+        toast({
+          title: "Error fetching mangas",
+          description: "Please try again later.",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }
@@ -66,17 +62,7 @@ const MangaPage = () => {
     if (searchQuery) {
       fetchMangas();
     }
-  }, [searchQuery]);
-
-  useEffect(() => {
-    if (error) {
-      toast({
-        title: "Error fetching mangas/Too many requests",
-        description: error,
-        variant: "destructive",
-      });
-    }
-  }, [error, toast]);
+  }, [searchQuery, toast]);
 
   if (loading)
     return (
