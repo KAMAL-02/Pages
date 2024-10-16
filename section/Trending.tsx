@@ -61,7 +61,7 @@ export const Trending = () => {
   return (
     <>
     <h2 className="text-3xl font-bold text-white mb-3 ml-4">Latest</h2>
-    <div className="hidden sm:flex flex-nowrap justify-center gap-2 overflow-x-auto">
+    <div className="sm:flex flex-nowrap justify-center gap-2 overflow-x-auto">
           {mangas.slice(0, 6).map((manga) => (
         <Card
           key={manga.id}
